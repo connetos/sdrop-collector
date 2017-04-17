@@ -18,9 +18,8 @@
 
 ## Example of plugin
 
-    - Below is the screenshot of the tag vlan not exist drop exported packet
+- Below is the screenshot of the tag vlan not exist drop exported packet
 
 ![tag\_vlan\_not\_exist](./tag_vlan_not_exist.png)
-
 
 
