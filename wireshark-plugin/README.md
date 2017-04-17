@@ -8,11 +8,14 @@
 - Find the init.lua file, add the line below <br>
 ```
 dofile(sdrop.lua)
-```<br>
-or<br>
+```
+<br>
+or
+<br>
 ```
 dofile(DATA_DIR.."sdrop.lua")
-```<br>
+```
+<br>
 With the first way, you don't need to put the sdrop.lua into to DATA_DIR, you can just put in the same directory with the pcap files.
 - Note that the current plugin assume you use the **default udp dest port(32768)**, if you use other, change it accordingly.
 
