@@ -9,9 +9,7 @@
 ```
 dofile(sdrop.lua)
 ```
-<br>
-or
-<br>
+<br>or<br>
 ```
 dofile(DATA_DIR.."sdrop.lua")
 ```
