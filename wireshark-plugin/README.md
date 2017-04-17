@@ -14,7 +14,7 @@ dofile(sdrop.lua)
 dofile(DATA_DIR.."sdrop.lua")
 ```
 <br>
-With the first way, you don't need to put the sdrop.lua into to DATA_DIR, you can just put in the same directory with the pcap files.
+With the first way, you don't need to put the sdrop.lua into to DATA_DIR, you can just put in the same directory with the pcap files.<br>
 - Note that the current plugin assume you use the **default udp dest port(32768)**, if you use other, change it accordingly.
 
 ## Example of plugin
