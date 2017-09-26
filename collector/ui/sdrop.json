@@ -1,0 +1,729 @@
+{
+    "annotations": {
+        "list": []
+    },
+    "editable": true,
+    "gnetId": null,
+    "graphTooltip": 0,
+    "hideControls": true,
+    "id": 6,
+    "links": [],
+    "refresh": false,
+    "rows": [
+        {
+            "collapse": false,
+            "height": 334,
+            "panels": [
+                {
+                    "columns": [],
+                    "datasource": "drop_packets",
+                    "fontSize": "100%",
+                    "id": 1,
+                    "links": [],
+                    "pageSize": null,
+                    "scroll": true,
+                    "showHeader": true,
+                    "sort": {
+                        "col": 4,
+                        "desc": true
+                    },
+                    "span": 8,
+                    "styles": [
+                        {
+                            "alias": "Time",
+                            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                            "pattern": "Time",
+                            "type": "date"
+                        },
+                        {
+                            "alias": "",
+                            "colorMode": null,
+                            "colors": [
+                                "rgba(245, 54, 54, 0.9)",
+                                "rgba(237, 129, 40, 0.89)",
+                                "rgba(50, 172, 45, 0.97)"
+                            ],
+                            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                            "decimals": 2,
+                            "pattern": "",
+                            "thresholds": [],
+                            "type": "number",
+                            "unit": "short"
+                        },
+                        {
+                            "alias": "",
+                            "colorMode": null,
+                            "colors": [
+                                "rgba(245, 54, 54, 0.9)",
+                                "rgba(237, 129, 40, 0.89)",
+                                "rgba(50, 172, 45, 0.97)"
+                            ],
+                            "decimals": 2,
+                            "pattern": "/.*/",
+                            "thresholds": [],
+                            "type": "number",
+                            "unit": "short"
+                        }
+                    ],
+                    "targets": [
+                        {
+                            "alias": "",
+                            "format": "table",
+                            "rawSql": "SELECT\n id as 'Id',\n device as 'Device' ,\ningress_interface as 'Input' ,\n egress_interface as 'Ouput',\n drop_reason_string as 'Drop Reason',\n last_detected_time as 'Last Detected Time',\n sample_packets as 'Sampled Packets'\n FROM drop_packet_meta_info\n WHERE device in ($device) AND egress_interface in ($output) AND ingress_interface in ($input);",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Drop Packets MetaData information",
+                    "transform": "table",
+                    "type": "table"
+                },
+                {
+                    "columns": [],
+                    "fontSize": "100%",
+                    "id": 2,
+                    "pageSize": null,
+                    "scroll": true,
+                    "showHeader": true,
+                    "sort": {
+                        "col": 1,
+                        "desc": false
+                    },
+                    "span": 4,
+                    "styles": [
+                        {
+                            "alias": "Time",
+                            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                            "pattern": "Time",
+                            "type": "date"
+                        },
+                        {
+                            "alias": "",
+                            "colorMode": null,
+                            "colors": [
+                                "rgba(245, 54, 54, 0.9)",
+                                "rgba(237, 129, 40, 0.89)",
+                                "rgba(50, 172, 45, 0.97)"
+                            ],
+                            "decimals": 2,
+                            "pattern": "/.*/",
+                            "thresholds": [],
+                            "type": "number",
+                            "unit": "short"
+                        }
+                    ],
+                    "targets": [
+                        {
+                            "alias": "",
+                            "format": "table",
+                            "rawSql": " SELECT\n id as 'Id',\n tpid as 'EtherType',\n vlanid as 'VlanId',\n last_detected_time as 'Last Detected Time'\n FROM drop_packet_vlan_tag_info WHERE vlanid in ($vlan);",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Dropped VLAN information",
+                    "transform": "table",
+                    "type": "table"
+                }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": false,
+            "title": "drop packets",
+            "titleSize": "h6"
+        },
+        {
+            "collapse": false,
+            "height": 334,
+            "panels": [
+                {
+                    "columns": [],
+                    "fontSize": "100%",
+                    "id": 3,
+                    "links": [],
+                    "pageSize": null,
+                    "scroll": true,
+                    "showHeader": true,
+                    "sort": {
+                        "col": 0,
+                        "desc": true
+                    },
+                    "span": 5,
+                    "styles": [
+                        {
+                            "alias": "Time",
+                            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                            "pattern": "Time",
+                            "type": "date"
+                        },
+                        {
+                            "alias": "",
+                            "colorMode": null,
+                            "colors": [
+                                "rgba(245, 54, 54, 0.9)",
+                                "rgba(237, 129, 40, 0.89)",
+                                "rgba(50, 172, 45, 0.97)"
+                            ],
+                            "decimals": 2,
+                            "pattern": "/.*/",
+                            "thresholds": [],
+                            "type": "number",
+                            "unit": "short"
+                        }
+                    ],
+                    "targets": [
+                        {
+                            "alias": "",
+                            "format": "table",
+                            "rawSql": " SELECT\n id as 'Id',\n dmac as 'DMAC' ,\n smac as 'SMAC',\n ether_type as 'EtherType',\n length as 'Length'\n FROM drop_packet_layer2_info where smac in ($smac) AND dmac in ($dmac) AND ether_type in ($ethertype);\n",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Dropped Layer 2 information",
+                    "transform": "table",
+                    "type": "table"
+                },
+                {
+                    "columns": [],
+                    "fontSize": "100%",
+                    "id": 4,
+                    "pageSize": null,
+                    "scroll": true,
+                    "showHeader": true,
+                    "sort": {
+                        "col": 0,
+                        "desc": true
+                    },
+                    "span": 7,
+                    "styles": [
+                        {
+                            "alias": "Time",
+                            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                            "pattern": "Time",
+                            "type": "date"
+                        },
+                        {
+                            "alias": "",
+                            "colorMode": null,
+                            "colors": [
+                                "rgba(245, 54, 54, 0.9)",
+                                "rgba(237, 129, 40, 0.89)",
+                                "rgba(50, 172, 45, 0.97)"
+                            ],
+                            "decimals": 2,
+                            "pattern": "/.*/",
+                            "thresholds": [],
+                            "type": "number",
+                            "unit": "short"
+                        }
+                    ],
+                    "targets": [
+                        {
+                            "alias": "",
+                            "format": "table",
+                            "rawSql": "SELECT\n id as 'Id',\n source_ip as 'Source IP' ,\n destination_ip as 'Dest IP',\n tos as 'TOS',\n length as 'Length',\n protocol as 'Protocol',\n ttl as 'TTL',\n last_detected_time as 'Last Detected Time'\n FROM drop_packet_ipv4_info WHERE source_ip in ($source_ip) AND destination_ip in ($dest_ip);\n",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Dropped IPv4 information",
+                    "transform": "table",
+                    "type": "table"
+                }
+
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": false,
+            "title": "Dashboard Row",
+            "titleSize": "h6"
+        },
+        {
+            "collapse": false,
+            "height": 260,
+            "panels": [
+                {
+                    "columns": [],
+                    "fontSize": "100%",
+                    "id": 5,
+                    "pageSize": null,
+                    "scroll": true,
+                    "showHeader": true,
+                    "sort": {
+                        "col": 0,
+                        "desc": true
+                    },
+                    "span": 7,
+                    "styles": [
+                        {
+                            "alias": "Time",
+                            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                            "pattern": "Time",
+                            "type": "date"
+                        },
+                        {
+                            "alias": "",
+                            "colorMode": null,
+                            "colors": [
+                                "rgba(245, 54, 54, 0.9)",
+                                "rgba(237, 129, 40, 0.89)",
+                                "rgba(50, 172, 45, 0.97)"
+                            ],
+                            "decimals": 2,
+                            "pattern": "/.*/",
+                            "thresholds": [],
+                            "type": "number",
+                            "unit": "short"
+                        }
+                    ],
+                    "targets": [
+                        {
+                            "alias": "",
+                            "format": "table",
+                            "rawSql": " SELECT\n id as 'Id',\n opcode as 'Opcode',\n sender_mac as 'Sender MAC',\n target_mac as 'Target MAC',\n sender_ip as 'Sender IP',\n target_ip as 'Target IP',\n last_detected_time as 'Last Detected Time'\n FROM drop_packet_arp_info WHERE sender_mac in ($sender_mac) AND sender_ip in ($sender_ip) AND target_mac in ($target_mac) AND target_ip in ($target_ip);",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Dropped ARP Information",
+                    "transform": "table",
+                    "type": "table"
+                },
+                {
+                    "columns": [],
+                    "fontSize": "100%",
+                    "id": 6,
+                    "pageSize": null,
+                    "scroll": true,
+                    "showHeader": true,
+                    "sort": {
+                        "col": 0,
+                        "desc": true
+                    },
+                    "span": 5,
+                    "styles": [
+                        {
+                            "alias": "Time",
+                            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                            "pattern": "Time",
+                            "type": "date"
+                        },
+                        {
+                            "alias": "",
+                            "colorMode": null,
+                            "colors": [
+                                "rgba(245, 54, 54, 0.9)",
+                                "rgba(237, 129, 40, 0.89)",
+                                "rgba(50, 172, 45, 0.97)"
+                            ],
+                            "decimals": 2,
+                            "pattern": "/.*/",
+                            "thresholds": [],
+                            "type": "number",
+                            "unit": "short"
+                        }
+                    ],
+                    "targets": [
+                        {
+                            "alias": "",
+                            "format": "table",
+                            "rawSql": "SELECT\n id as 'Id',\n l4_source_port as 'Source Protocol' ,\n l4_destination_port as 'Dest Protocol',\n last_detected_time as 'Last Detected Time'\n FROM drop_packet_ip_protocol_info WHERE l4_source_port in ($source_protocol) AND l4_destination_port in ($dest_protocol);\n",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Dropped Protocols information",
+                    "transform": "table",
+                    "type": "table"
+                }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": false,
+            "title": "Dashboard Row",
+            "titleSize": "h6"
+        }
+    ],
+    "schemaVersion": 14,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+        "list": [
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "device",
+                "multi": false,
+                "name": "device",
+                "options": [],
+                "query": "select device from drop_packet_meta_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "input",
+                "multi": false,
+                "name": "input",
+                "options": [],
+                "query": "select ingress_interface from drop_packet_meta_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "output",
+                "multi": false,
+                "name": "output",
+                "options": [],
+                "query": "select egress_interface from drop_packet_meta_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "smac",
+                "multi": false,
+                "name": "smac",
+                "options": [],
+                "query": "select smac from drop_packet_layer2_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "dmac",
+                "multi": false,
+                "name": "dmac",
+                "options": [],
+                "query": "select dmac from drop_packet_layer2_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "ethertype",
+                "multi": false,
+                "name": "ethertype",
+                "options": [],
+                "query": "select ether_type from drop_packet_layer2_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "vlan",
+                "multi": false,
+                "name": "vlan",
+                "options": [],
+                "query": "select vlanid from drop_packet_vlan_tag_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "source_ip",
+                "multi": false,
+                "name": "source_ip",
+                "options": [],
+                "query": "select source_ip from drop_packet_ipv4_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "dest_ip",
+                "multi": false,
+                "name": "dest_ip",
+                "options": [],
+                "query": "select destination_ip from drop_packet_ipv4_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "sender_ip",
+                "multi": false,
+                "name": "sender_ip",
+                "options": [],
+                "query": "select sender_ip from drop_packet_arp_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "sender_mac",
+                "multi": false,
+                "name": "sender_mac",
+                "options": [],
+                "query": "select sender_mac from drop_packet_arp_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "target_ip",
+                "multi": false,
+                "name": "target_ip",
+                "options": [],
+                "query": "select target_ip from drop_packet_arp_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "target_mac",
+                "multi": false,
+                "name": "target_mac",
+                "options": [],
+                "query": "select target_mac from drop_packet_arp_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "source_protocol",
+                "multi": false,
+                "name": "source_protocol",
+                "options": [],
+                "query": "select l4_source_port from drop_packet_ip_protocol_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "dest_protocol",
+                "multi": false,
+                "name": "dest_protocol",
+                "options": [],
+                "query": "select l4_destination_port from drop_packet_ip_protocol_info",
+                "refresh": 1,
+                "regex": "",
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            }
+        ]
+    },
+    "time": {
+        "from": "2017-09-22T05:41:34.810Z",
+        "to": "2017-09-22T05:41:37.725Z"
+    },
+    "timepicker": {
+        "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+        ],
+        "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+        ]
+    },
+    "timezone": "utc",
+    "title": "drop packets mysql",
+    "version": 1
+}
