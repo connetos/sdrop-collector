@@ -21,9 +21,10 @@
 
 - Below is the screenshot of the tag vlan not exist drop exported packet
 
-![tag\_vlan\_not\_exist](./tag_vlan_not_exist.png)
+<img src="./tag_vlan_not_exist.png" width = "600" height = "400" alt="tag vlan not exist" align=center />
 
 - Below is the screenshot of the l3 lookup miss drop exported packet
 
-![l3\_lookup\_miss](./l3_lookup_miss.png)
+<img src="./l3_lookup_miss.png" width = "600" height = "400" alt="l3 lookup miss" align=center />
+
 
