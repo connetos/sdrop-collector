@@ -2,7 +2,8 @@
 
 This repository contains information related to sDrop.
 
-wireshark-plugin contain wireshark plugin to display the export information of sDrop.
+- wireshark-plugin contain wireshark plugin to display the export information of sDrop.
+- collector contain a simple present of dropped packets base on grafana.
 
 Now sDrop uses xml to encap the information of the dropped packet, below is an example.
 
