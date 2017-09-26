@@ -9,4 +9,4 @@ grafana is a powerful frontend to represent metric, it supports all kinds of dat
 
 Below is UI of the sdrop collector.
 
-![sdrop grafana](./sdrop.png)
+<img src="./sdrop.png" width = "900" height = "600" alt="sdrop grafana" align=center />
