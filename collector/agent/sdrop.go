@@ -21,7 +21,7 @@ const (
     MyDB = "drop_packets"
     service = ":32768"
     username = "root"
-    password = "1q2w3e"
+    password = "mysqlpass"
     DbUrl = username + ":" + password + "@/" + MyDB + "?charset=utf8"
     hexDigit = "0123456789abcdef"
 )
@@ -106,8 +106,7 @@ func decodePacketData(packet string) []byte {
 func updateDropPacketMeta(db *sql.DB,
     device string, ingress_interface string,
     egress_interface string, drop_reason int64, drop_reason_string string,
-    timestamp string, layer2_index int, tag_index int, arp_index int,
-    layer3_index int, layer4_index int) {
+    timestamp string) int {
 
     // if old drop packet meta exists
     stmt, err := db.Prepare("SELECT id,sample_packets FROM drop_packet_meta_info " +
@@ -123,33 +122,36 @@ func updateDropPacketMeta(db *sql.DB,
     if (err == nil) {
         /* update exist one */
         stmt, err := db.Prepare("update drop_packet_meta_info " +
-            "set sample_packets=?,last_detected_time=?,layer2_index=?,tag_index=?," +
-            "arp_index=?,layer3_index=?,layer4_index=? where id=?")
+            "set sample_packets=?,last_detected_time=? where id=?")
         checkErr(err)
 
-        _, err = stmt.Exec(sample_packets + 1, timestamp, layer2_index, tag_index,
-            arp_index, layer3_index, layer4_index, id)
+        _, err = stmt.Exec(sample_packets + 1, timestamp, id)
         checkErr(err)
     } else {
         /* insert new one */
         stmt, err := db.Prepare(
             "INSERT drop_packet_meta_info SET " +
             "device=?,ingress_interface=?,egress_interface=?,drop_reason=?," +
-            "drop_reason_string=?,last_detected_time=?," +
-            "sample_packets=?,layer2_index=?,tag_index=?,arp_index=?,layer3_index=?,layer4_index=?")
+            "drop_reason_string=?,last_detected_time=?,sample_packets=?")
         checkErr(err)
 
-        _, err = stmt.Exec(device, ingress_interface, egress_interface,
-            drop_reason, drop_reason_string, timestamp, 1, layer2_index,
-            tag_index, arp_index, layer3_index, layer4_index)
+        res, err := stmt.Exec(device, ingress_interface, egress_interface,
+            drop_reason, drop_reason_string, timestamp, 1)
         checkErr(err)
+
+        tmp, err := res.LastInsertId()
+        checkErr(err)
+
+        id = int(tmp)
     }
 
     stmt.Close();
+
+    return id
 }
 
 func updateDropPacketEthernetInfo(db *sql.DB, packet gopacket.Packet,
-    packet_length uint64, timestamp string) int {
+    packet_length uint64, timestamp string, drop_index int) {
     var id int
 
     // Get the ethernet layer from this packet
@@ -173,28 +175,28 @@ func updateDropPacketEthernetInfo(db *sql.DB, packet gopacket.Packet,
         if (err == nil) {
             /* update exist one */
             stmt, err := db.Prepare("update drop_packet_layer2_info " +
-                "set length=?,last_detected_time=? where id=?")
+                "set length=?,last_detected_time=?,drop_id=? where id=?")
             checkErr(err)
 
-            _, err = stmt.Exec(length, timestamp, id)
+            _, err = stmt.Exec(length, timestamp, drop_index, id)
             checkErr(err)
         } else {
             /* insert new one */
             stmt, err := db.Prepare("INSERT drop_packet_layer2_info SET " +
-                "smac=?,dmac=?,ether_type=?,length=?,last_detected_time=?")
+                "smac=?,dmac=?,ether_type=?,length=?,last_detected_time=?,drop_id=?")
             checkErr(err)
 
-            _, err = stmt.Exec(smac, dmac, etype, length, timestamp)
+            _, err = stmt.Exec(smac, dmac, etype, length, timestamp, drop_index)
             checkErr(err)
         }
 
         stmt.Close();
     }
-
-    return id
 }
 
-func updateDropPacketVlanInfo(db *sql.DB, packet gopacket.Packet, vid uint16, timestamp string) int {
+func updateDropPacketVlanInfo(db *sql.DB, packet gopacket.Packet,
+    vid uint16, timestamp string, drop_index int) {
+
     var id int
     var vlanid uint16
     var etype string
@@ -223,27 +225,25 @@ func updateDropPacketVlanInfo(db *sql.DB, packet gopacket.Packet, vid uint16, ti
     if (err == nil) {
         /* update exist one */
         stmt, err := db.Prepare("update drop_packet_vlan_tag_info " +
-        "set last_detected_time=? where id=?")
+        "set last_detected_time=?,drop_id=? where id=?")
         checkErr(err)
 
-        _, err = stmt.Exec(timestamp, id)
+        _, err = stmt.Exec(timestamp, drop_index, id)
         checkErr(err)
     } else {
         /* insert new one */
         stmt, err := db.Prepare("INSERT drop_packet_vlan_tag_info SET " +
-        "tpid=?,vlanid=?,last_detected_time=?")
+        "tpid=?,vlanid=?,last_detected_time=?,drop_id=?")
         checkErr(err)
 
-        _, err = stmt.Exec(etype, vlanid, timestamp)
+        _, err = stmt.Exec(etype, vlanid, timestamp, drop_index)
         checkErr(err)
     }
 
     stmt.Close()
-
-    return id
 }
 
-func updateDropPacketArpInfo(db *sql.DB, packet gopacket.Packet, timestamp string) int {
+func updateDropPacketArpInfo(db *sql.DB, packet gopacket.Packet, timestamp string, drop_index int) {
     var id int
 
     // Get the arp layer from this packet
@@ -268,28 +268,26 @@ func updateDropPacketArpInfo(db *sql.DB, packet gopacket.Packet, timestamp strin
         if (err == nil) {
             /* update exist one */
             stmt, err := db.Prepare("update drop_packet_arp_info " +
-            "set last_detected_time=? where id=?")
+            "set last_detected_time=?,drop_id=? where id=?")
             checkErr(err)
 
-            _, err = stmt.Exec(timestamp, id)
+            _, err = stmt.Exec(timestamp, drop_index, id)
             checkErr(err)
         } else {
             stmt, err := db.Prepare("INSERT drop_packet_arp_info SET " +
                 "opcode=?,sender_ip=?,sender_mac=?,target_ip=?,target_mac=?," +
-                "last_detected_time=?")
+                "last_detected_time=?,drop_id=?")
             checkErr(err)
 
-            _, err = stmt.Exec(op, sip, smac, tip, tmac, timestamp)
+            _, err = stmt.Exec(op, sip, smac, tip, tmac, timestamp, drop_index)
             checkErr(err)
         }
 
         stmt.Close()
     }
-
-    return id
 }
 
-func updateDropPacketIpv4Info(db *sql.DB, packet gopacket.Packet, timestamp string) int {
+func updateDropPacketIpv4Info(db *sql.DB, packet gopacket.Packet, timestamp string, drop_index int) {
     var id int
 
     // Get the IPv4 layer from this packet
@@ -315,29 +313,27 @@ func updateDropPacketIpv4Info(db *sql.DB, packet gopacket.Packet, timestamp stri
         if (err == nil) {
             /* update exist one */
             stmt, err := db.Prepare("update drop_packet_ipv4_info " +
-            "set tos=?,length=?,ttl=?,last_detected_time=? where id=?")
+            "set tos=?,length=?,ttl=?,last_detected_time=?,drop_id=? where id=?")
             checkErr(err)
 
-            _, err = stmt.Exec(tos, length, ttl, timestamp, id)
+            _, err = stmt.Exec(tos, length, ttl, timestamp, drop_index, id)
             checkErr(err)
         } else {
             /* insert new one */
             stmt, err := db.Prepare("INSERT drop_packet_ipv4_info SET " +
                 "source_ip=?,destination_ip=?,tos=?,length=?,ttl=?," +
-                "protocol=?,last_detected_time=?")
+                "protocol=?,last_detected_time=?,drop_id=?")
             checkErr(err)
 
-            _, err = stmt.Exec(sip, dip, tos, length, ttl, proto, timestamp)
+            _, err = stmt.Exec(sip, dip, tos, length, ttl, proto, timestamp, drop_index)
             checkErr(err)
         }
 
         stmt.Close()
     }
-
-    return id
 }
 
-func updateDropPacketProtocolInfo(db *sql.DB, packet gopacket.Packet, timestamp string) int {
+func updateDropPacketProtocolInfo(db *sql.DB, packet gopacket.Packet, timestamp string, drop_index int) {
     var sport string
     var dport string
 
@@ -353,7 +349,7 @@ func updateDropPacketProtocolInfo(db *sql.DB, packet gopacket.Packet, timestamp 
         sport = udp.SrcPort.String()
         dport = udp.DstPort.String()
     } else {
-        return 0
+        return
     }
 
     // if old drop packet meta exists
@@ -369,24 +365,22 @@ func updateDropPacketProtocolInfo(db *sql.DB, packet gopacket.Packet, timestamp 
     if (err == nil) {
         /* update exist one */
         stmt, err := db.Prepare("update drop_packet_ip_protocol_info " +
-            "set l4_source_port=?,l4_destination_port=?,last_detected_time=? where id=?")
+            "set l4_source_port=?,l4_destination_port=?,last_detected_time=?,drop_id=? where id=?")
         checkErr(err)
 
-        _, err = stmt.Exec(sport, dport, timestamp, id)
+        _, err = stmt.Exec(sport, dport, timestamp, drop_index, id)
         checkErr(err)
     } else {
         /* insert new one */
         stmt, err := db.Prepare("INSERT drop_packet_ip_protocol_info SET " +
-            "l4_source_port=?,l4_destination_port=?,last_detected_time=?")
+            "l4_source_port=?,l4_destination_port=?,last_detected_time=?,drop_id=?")
         checkErr(err)
 
-        _, err = stmt.Exec(sport, dport, timestamp)
+        _, err = stmt.Exec(sport, dport, timestamp, drop_index)
         checkErr(err)
     }
 
     stmt.Close()
-
-    return id
 }
 
 func processDropPacket(packet string, addr *net.UDPAddr) {
@@ -406,18 +400,17 @@ func processDropPacket(packet string, addr *net.UDPAddr) {
     if datasize != 0 {
         pkt := gopacket.NewPacket(data, layers.LayerTypeEthernet, gopacket.Default)
 
-        layer2_index := updateDropPacketEthernetInfo(db, pkt, packetsize, timestamp)
-        tag_index := updateDropPacketVlanInfo(db, pkt, uint16(vlanid), timestamp)
-        arp_index := updateDropPacketArpInfo(db, pkt, timestamp)
-        layer3_index := updateDropPacketIpv4Info(db, pkt, timestamp)
-        layer4_index := updateDropPacketProtocolInfo(db, pkt, timestamp)
-        updateDropPacketMeta(db, fmt.Sprintf("%s", addr.IP),
-            ingress_interface, egress_interface, drop_reason, drop_reason_string,
-            timestamp, layer2_index, tag_index, arp_index, layer3_index, layer4_index)
+        drop_index := updateDropPacketMeta(db, fmt.Sprintf("%s", addr.IP),
+            ingress_interface, egress_interface, drop_reason, drop_reason_string, timestamp)
+        updateDropPacketEthernetInfo(db, pkt, packetsize, timestamp, drop_index)
+        updateDropPacketVlanInfo(db, pkt, uint16(vlanid), timestamp, drop_index)
+        updateDropPacketArpInfo(db, pkt, timestamp, drop_index)
+        updateDropPacketIpv4Info(db, pkt, timestamp, drop_index)
+        updateDropPacketProtocolInfo(db, pkt, timestamp, drop_index)
     } else {
-        updateDropPacketMeta(db, fmt.Sprintf("%s", addr.IP),
+        _ = updateDropPacketMeta(db, fmt.Sprintf("%s", addr.IP),
             ingress_interface,egress_interface, drop_reason, drop_reason_string,
-            timestamp, 0, 0, 0, 0, 0)
+            timestamp)
     }
 
     db.Close()
