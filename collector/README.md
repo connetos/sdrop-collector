@@ -63,6 +63,18 @@ go build
 ./agent
 </pre>
 
+The Agent assume the device uses the UDP 32768 as the port the export dropped packets, if you changed to other then you should modify the code below.
+<pre>
+const (
+    MyDB = "drop_packets"
+    service = ":32768"
+    username = "root"
+    password = "mysqlpass"
+    DbUrl = username + ":" + password + "@/" + MyDB + "?charset=utf8"
+    hexDigit = "0123456789abcdef"
+)
+</pre>
+
 ### Install Mysql
 
 Install Mysql by package manage tools like apt-get/yum etc.<br>
