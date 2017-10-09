@@ -4,11 +4,11 @@ use drop_packets;
 
 /*
 drop_packet_meta_info
-+-------+-----------+----------+----------+-----------+---------------+-------------------+--------------------+-----------------------+
-|  id   |  device   | ingress  |  egress  |   reason  |   timestamp   |   reason string   |   sample packets   |  layer2/tag/3/4 index |
-+-------+-----------+----------+----------+-----------+---------------+-------------------+--------------------+-----------------------+
-|       |           |          |          |           |               |                   |                    |                       |
-+-------+-----------+----------+----------+-----------+---------------+-------------------+--------------------+-----------------------+
++-------+-----------+----------+----------+-----------+---------------+-------------------+--------------------+
+|  id   |  device   | ingress  |  egress  |   reason  |   timestamp   |   reason string   |   sample packets   |
++-------+-----------+----------+----------+-----------+---------------+-------------------+--------------------+
+|       |           |          |          |           |               |                   |                    |
++-------+-----------+----------+----------+-----------+---------------+-------------------+--------------------+
 */
 
 CREATE TABLE drop_packet_meta_info( 
@@ -20,11 +20,6 @@ CREATE TABLE drop_packet_meta_info(
     drop_reason_string VARCHAR(100) NOT NULL, 
     last_detected_time TIMESTAMP, 
     sample_packets INT NOT NULL, 
-    layer2_index INT NOT NULL, 
-    tag_index INT NOT NULL, 
-    arp_index INT NOT NULL, 
-    layer3_index INT NOT NULL, 
-    layer4_index INT NOT NULL, 
     PRIMARY KEY ( id )) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*
@@ -43,6 +38,7 @@ CREATE TABLE drop_packet_layer2_info(
     ether_type VARCHAR(32) NOT NULL,
     length INT NOT NULL,
     last_detected_time TIMESTAMP, 
+    drop_id INT NOT NULL,
     PRIMARY KEY ( id ))ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*
@@ -65,6 +61,7 @@ CREATE TABLE drop_packet_vlan_tag_info(
     tpid VARCHAR(32) NOT NULL,
     vlanid SMALLINT NOT NULL,
     last_detected_time TIMESTAMP, 
+    drop_id INT NOT NULL,
     PRIMARY KEY ( id ))ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*
@@ -84,6 +81,7 @@ CREATE TABLE drop_packet_arp_info(
     sender_ip VARCHAR(64) NOT NULL, 
     target_ip VARCHAR(64) NOT NULL, 
     last_detected_time TIMESTAMP, 
+    drop_id INT NOT NULL,
     PRIMARY KEY ( id ))ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*
@@ -104,6 +102,7 @@ CREATE TABLE drop_packet_ipv4_info(
     ttl INT NOT NULL, 
     protocol VARCHAR(64) NOT NULL, 
     last_detected_time TIMESTAMP, 
+    drop_id INT NOT NULL,
     PRIMARY KEY ( id ))ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*
@@ -120,5 +119,6 @@ CREATE TABLE drop_packet_ip_protocol_info(
     l4_source_port VARCHAR(64) NOT NULL, 
     l4_destination_port VARCHAR(64) NOT NULL, 
     last_detected_time TIMESTAMP, 
+    drop_id INT NOT NULL,
     PRIMARY KEY ( id ))ENGINE=InnoDB DEFAULT CHARSET=utf8; 
 
