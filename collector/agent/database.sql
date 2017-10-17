@@ -122,3 +122,34 @@ CREATE TABLE drop_packet_ip_protocol_info(
     drop_id INT NOT NULL,
     PRIMARY KEY ( id ))ENGINE=InnoDB DEFAULT CHARSET=utf8; 
 
+/*
+drop_packet_detail_info
+*/
+
+CREATE TABLE drop_packet_detail_info( 
+    id INT NOT NULL AUTO_INCREMENT, 
+    device VARCHAR(32) NOT NULL,
+    ingress_interface VARCHAR(32) NOT NULL,
+    egress_interface VARCHAR(32) NOT NULL, 
+    drop_reason_string VARCHAR(100) NOT NULL, 
+    dmac VARCHAR(64) NOT NULL,
+    smac VARCHAR(64) NOT NULL,
+    ether_type VARCHAR(32) NOT NULL,
+    length INT NOT NULL,
+    vlanid SMALLINT NOT NULL,
+    opcode TINYINT NOT NULL, 
+    sender_mac VARCHAR(64) NOT NULL,
+    target_mac VARCHAR(64) NOT NULL,
+    sender_ip VARCHAR(64) NOT NULL, 
+    target_ip VARCHAR(64) NOT NULL, 
+    source_ip VARCHAR(64) NOT NULL, 
+    destination_ip VARCHAR(64) NOT NULL, 
+    protocol VARCHAR(64) NOT NULL, 
+    tos INT NOT NULL, 
+    ip_length INT NOT NULL,
+    ttl INT NOT NULL, 
+    l4_source_port VARCHAR(64) NOT NULL, 
+    l4_destination_port VARCHAR(64) NOT NULL, 
+    last_detected_time TIMESTAMP, 
+    PRIMARY KEY ( id ))ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+
