@@ -1,0 +1,636 @@
+{
+    "annotations": {
+        "list": []
+    },
+    "editable": true,
+    "gnetId": null,
+    "graphTooltip": 0,
+    "hideControls": false,
+    "id": 27,
+    "links": [],
+    "refresh": false,
+    "rows": [
+        {
+            "collapse": false,
+            "height": "250px",
+            "panels": [
+                {
+                    "columns": [],
+                    "datasource": "drop_packets",
+                    "fontSize": "100%",
+                    "height": "",
+                    "hideTimeOverride": false,
+                    "id": 1,
+                    "links": [],
+                    "pageSize": null,
+                    "repeat": null,
+                    "scroll": true,
+                    "showHeader": true,
+                    "sort": {
+                        "col": null,
+                        "desc": false
+                    },
+                    "span": 12,
+                    "styles": [
+                        {
+                            "alias": "",
+                            "colorMode": null,
+                            "colors": [
+                                "rgba(245, 54, 54, 0.9)",
+                                "rgba(237, 129, 40, 0.89)",
+                                "rgba(50, 172, 45, 0.97)"
+                            ],
+                            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                            "decimals": 0,
+                            "pattern": "Last Detected Time",
+                            "thresholds": [],
+                            "type": "date",
+                            "unit": "short"
+                        }
+                    ],
+                    "targets": [
+                        {
+                            "alias": "",
+                            "format": "table",
+                            "rawSql": "SELECT\nid AS \"ID\",\ndevice AS \"Device\",\ningress_interface AS \"Input\",\negress_interface AS \"Output\",\ndrop_reason_string AS \"Drop Reason\",\ndmac AS \"DMAC\",\nsmac AS \"SMAC\",\nlength AS \"Length\",\nether_type AS \"EtherType\",\nvlanid AS \"VLANID\",\nsource_ip AS \"Source IP\",\ndestination_ip AS \"Destination IP\",\nprotocol AS \"Protocol\",\ntos AS \"TOS\",\nttl AS \"TTL\",\nip_length AS \"IP Length\"\nFROM drop_packet_detail_info\nWHERE ether_type = \"IPv4\" \nAND device IN ($device) And ingress_interface in ($input) AND egress_interface in ($output) and drop_reason_string in ($drop_reason)\nAND dmac in ($dmac) and smac in ($smac)\nAND ether_type in ($ethertype) AND vlanid in ($vlanid)\nAND source_ip in ($source_ip) AND destination_ip in ($dest_ip) AND protocol in ($ip_proto)\nAND l4_source_port in ($l4_source_port) AND l4_destination_port in ($l4_dest_port)\nORDER BY last_detected_time",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Filtered Dropped IP Packets",
+                    "transform": "table",
+                    "transparent": false,
+                    "type": "table"
+                }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": false,
+            "title": "Dashboard Row",
+            "titleSize": "h6"
+        },
+        {
+            "collapse": false,
+            "height": 250,
+            "panels": [
+                {
+                    "columns": [],
+                    "datasource": "drop_packets",
+                    "fontSize": "100%",
+                    "id": 2,
+                    "links": [],
+                    "pageSize": null,
+                    "scroll": true,
+                    "showHeader": true,
+                    "sort": {
+                        "col": 0,
+                        "desc": true
+                    },
+                    "span": 12,
+                    "styles": [
+                        {
+                            "alias": "",
+                            "colorMode": null,
+                            "colors": [
+                                "rgba(245, 54, 54, 0.9)",
+                                "rgba(237, 129, 40, 0.89)",
+                                "rgba(50, 172, 45, 0.97)"
+                            ],
+                            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                            "decimals": 0,
+                            "pattern": "Last Detected Time",
+                            "thresholds": [],
+                            "type": "date",
+                            "unit": "short"
+                        }
+                    ],
+                    "targets": [
+                        {
+                            "alias": "",
+                            "format": "table",
+                            "rawSql": "SELECT\nid AS \"ID\",\ndevice AS \"Device\",\ningress_interface AS \"Input\",\negress_interface AS \"Output\",\ndrop_reason_string AS \"Drop Reason\",\ndmac AS \"DMAC\",\nsmac AS \"SMAC\",\nlength AS \"Length\",\nether_type AS \"EtherType\",\nvlanid AS \"VLANID\",\nopcode AS \"Arp Opcode\",\nsender_ip AS \"Sender IP\",\nsender_mac AS \"Sender MAC\",\ntarget_ip AS \"Target IP\",\ntarget_mac AS \"Target MAC\"\nFROM drop_packet_detail_info\nWHERE ether_type = \"ARP\" \nAND device IN ($device) AND ingress_interface in ($input) AND egress_interface in ($output) AND drop_reason_string in ($drop_reason)\nAND dmac in ($dmac) AND smac in ($smac)\nAND ether_type in ($ethertype) AND vlanid in ($vlanid)\nORDER BY last_detected_time",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Filtered Dropped ARP packets",
+                    "transform": "table",
+                    "type": "table"
+                }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": false,
+            "title": "Dashboard Row",
+            "titleSize": "h6"
+        },
+        {
+            "collapse": false,
+            "height": 250,
+            "panels": [
+                {
+                    "columns": [],
+                    "datasource": "drop_packets",
+                    "fontSize": "100%",
+                    "id": 3,
+                    "links": [],
+                    "pageSize": null,
+                    "scroll": true,
+                    "showHeader": true,
+                    "sort": {
+                        "col": 0,
+                        "desc": true
+                    },
+                    "span": 12,
+                    "styles": [
+                        {
+                            "alias": "",
+                            "colorMode": null,
+                            "colors": [
+                                "rgba(245, 54, 54, 0.9)",
+                                "rgba(237, 129, 40, 0.89)",
+                                "rgba(50, 172, 45, 0.97)"
+                            ],
+                            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                            "decimals": 0,
+                            "pattern": "Last Detected Time",
+                            "thresholds": [],
+                            "type": "date",
+                            "unit": "short"
+                        }
+                    ],
+                    "targets": [
+                        {
+                            "alias": "",
+                            "format": "table",
+                            "rawSql": "SELECT\nid AS \"ID\",\ndevice AS \"Device\",\ningress_interface AS \"Input\",\negress_interface AS \"Output\",\ndrop_reason_string AS \"Drop Reason\",\ndmac AS \"DMAC\",\nsmac AS \"SMAC\",\nlength AS \"Length\",\nether_type AS \"EtherType\",\nvlanid AS \"VLANID\"\nFROM drop_packet_detail_info\nWHERE ether_type != \"ARP\" AND ether_type != \"IPv4\"\nAND device IN ($device) And ingress_interface in ($input) AND egress_interface in ($output)\nAND ether_type in ($ethertype) AND vlanid in ($vlanid)\nORDER BY last_detected_time",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Filtered Dropped Ethernet Packets",
+                    "transform": "table",
+                    "type": "table"
+                }
+            ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": false,
+            "title": "Dashboard Row",
+            "titleSize": "h6"
+        }
+    ],
+    "schemaVersion": 14,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+        "list": [
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Device",
+                "multi": false,
+                "name": "device",
+                "options": [],
+                "query": "select DISTINCT device from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Input",
+                "multi": false,
+                "name": "input",
+                "options": [],
+                "query": "select DISTINCT ingress_interface from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Output",
+                "multi": false,
+                "name": "output",
+                "options": [],
+                "query": "select DISTINCT egress_interface from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Drop Reason",
+                "multi": false,
+                "name": "drop_reason",
+                "options": [],
+                "query": "select DISTINCT drop_reason_string from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "DMAC",
+                "multi": false,
+                "name": "dmac",
+                "options": [],
+                "query": "select DISTINCT dmac from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "SMAC",
+                "multi": false,
+                "name": "smac",
+                "options": [],
+                "query": "select DISTINCT smac from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Ethertype",
+                "multi": false,
+                "name": "ethertype",
+                "options": [],
+                "query": "select DISTINCT ether_type from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Vlanid",
+                "multi": false,
+                "name": "vlanid",
+                "options": [],
+                "query": "select DISTINCT vlanid from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Source IP",
+                "multi": false,
+                "name": "source_ip",
+                "options": [],
+                "query": "select DISTINCT source_ip from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Destination IP",
+                "multi": false,
+                "name": "dest_ip",
+                "options": [],
+                "query": "select DISTINCT destination_ip from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "IP Protocol",
+                "multi": false,
+                "name": "ip_proto",
+                "options": [],
+                "query": "select DISTINCT protocol from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "L4 Source Port",
+                "multi": false,
+                "name": "l4_source_port",
+                "options": [],
+                "query": "select DISTINCT l4_source_port from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "L4 Dest Port",
+                "multi": false,
+                "name": "l4_dest_port",
+                "options": [],
+                "query": "select DISTINCT l4_destination_port from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Arp Opcode",
+                "multi": false,
+                "name": "arp_opcode",
+                "options": [],
+                "query": "select DISTINCT opcode from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Sender IP",
+                "multi": false,
+                "name": "sender_ip",
+                "options": [],
+                "query": "select DISTINCT sender_ip from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Target IP",
+                "multi": false,
+                "name": "target_ip",
+                "options": [],
+                "query": "select DISTINCT target_ip from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Sender MAC",
+                "multi": false,
+                "name": "sender_mac",
+                "options": [],
+                "query": "select DISTINCT sender_mac from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": null,
+                "current": {
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": "drop_packets",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Target MAC",
+                "multi": false,
+                "name": "target_mac",
+                "options": [],
+                "query": "select DISTINCT target_mac from drop_packet_detail_info",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            }
+        ]
+    },
+    "time": {
+        "from": "2017-10-15T18:40:20.611Z",
+        "to": "2017-10-16T06:40:20.611Z"
+    },
+    "timepicker": {
+        "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+        ],
+        "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+        ]
+    },
+    "timezone": "",
+    "title": "drop packet search",
+    "version": 1
+}
